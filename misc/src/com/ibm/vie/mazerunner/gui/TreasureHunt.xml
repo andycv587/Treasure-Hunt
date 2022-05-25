@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+-->
+<SpriteSheet>
+    <sprite n="Grass_0" x="0" y="0" w="96" h="96"/>
+    <sprite n="Grass_1" x="96" y="0" w="96" h="96"/>
+    <sprite n="Grass_2" x="192" y="0" w="96" h="96"/>
+    <sprite n="Grass_3" x="288" y="0" w="96" h="96"/>
+    <sprite n="Hunter_Down" x="384" y="0" w="384" h="96"/>
+    <sprite n="Hunter_Left" x="768" y="0" w="384" h="96"/>
+    <sprite n="Hunter_Right" x="0" y="96" w="384" h="96"/>
+    <sprite n="Hunter_Stationary_Right" x="384" y="96" w="96" h="96"/>
+    <sprite n="Hunter_Stationary_Left" x="480" y="96" w="96" h="96"/>
+    <sprite n="Hunter_Stationary_Down" x="576" y="96" w="96" h="96"/>
+    <sprite n="Hunter_Stationary_Up" x="672" y="96" w="96" h="96"/>
+    <sprite n="Hunter_Up" x="768" y="96" w="384" h="96"/>
+    <sprite n="Title" x="0" y="192" w="960" h="600"/>
+    <sprite n="Treasure_closed" x="960" y="192" w="96" h="96"/>
+    <sprite n="Treasure_open" x="1056" y="192" w="96" h="96"/>
+    <sprite n="Mud" x="960" y="288" w="96" h="96"/>
+    <sprite n="Water" x="1056" y="288" w="96" h="96"/>
+    <sprite n="Lava" x="960" y="384" w="96" h="96"/>
+    <sprite n="Bushes" x="1056" y="384" w="96" h="96"/>
+    <sprite n="Mountain" x="960" y="480" w="96" h="96"/>
+    <sprite n="Wall.old" x="1056" y="480" w="96" h="96"/>
+    <sprite n="Wall" x="960" y="576" w="96" h="96"/>
+    <sprite n="Trees" x="0" y="792" w="96" h="96"/>
+    <sprite n="button_back_to_boards" x="96" y="792" w="196" h="43"/>
+    <sprite n="button_boards" x="292" y="792" w="114" h="43"/>
+    <sprite n="button_builder" x="406" y="792" w="117" h="43"/>
+    <sprite n="button_create" x="523" y="792" w="112" h="43"/>
+    <sprite n="button_launch" x="635" y="792" w="114" h="43"/>
+    <sprite n="button_load_board" x="749" y="792" w="158" h="43"/>
+    <sprite n="button_menu" x="907" y="792" w="103" h="43"/>
+    <sprite n="button_pause" x="1010" y="792" w="103" h="43"/>
+    <sprite n="button_quit" x="0" y="888" w="88" h="43"/>
+    <sprite n="button_run" x="88" y="888" w="82" h="43"/>
+    <sprite n="button_run_all" x="170" y="888" w="115" h="43"/>
+    <sprite n="button_save" x="285" y="888" w="92" h="43"/>
+    <sprite n="button_step" x="377" y="888" w="91" h="43"/>
+    <sprite n="button_remove" x="468" y="888" w="42" h="43"/>
+</SpriteSheet>

@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.ibm.vie.mazerunner"},{"l":"com.ibm.vie.mazerunner.squares"}];updateSearchResults();

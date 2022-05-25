@@ -105,7 +105,7 @@ public class MyPlayer implements IPlayer {
       }
       
       System.out.println("you are starting at "+playerlocation());
-      System.out.println("you have total "+treasures+" treasures on this board");
+      System.out.println("you have total "+treass+" treasures on this board");
       System.out.println("you have total "+trees+" tree square on this board");
       System.out.println("you have total "+muds+" mud squares on this board");
       System.out.println("you have total "+waters+" water squares on this board");

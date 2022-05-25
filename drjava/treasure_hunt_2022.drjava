@@ -3,9 +3,9 @@
   <project autorefresh="false" main="MyPlayer" manifest="" root="" work="">
     <createjar file="schoolname_firstname_lastname.jar" flags="8"/>
     <source>
-      <file active="true" name="MyPlayer.java" package="" timestamp="25-May-2022 15:09:04">
-        <select from="13009" to="13009"/>
-        <scroll column="6646" row="0"/>
+      <file active="true" name="MyPlayer.java" package="" timestamp="25-May-2022 15:09:21">
+        <select from="940" to="940"/>
+        <scroll column="0" row="0"/>
       </file>
     </source>
     <included/>

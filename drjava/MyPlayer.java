@@ -240,9 +240,8 @@ public class MyPlayer implements IPlayer {
           moves=new Stack<Move>();
           this.reset();
           return mov;
-        
       }
-        return Move.SOUTH;
+        return Move.WEST;
     }
     
     public String playerlocation(){
@@ -271,7 +270,7 @@ public class MyPlayer implements IPlayer {
      * @param board The game board for your player to analyze
      */
     public void gameCompleted(IBoard board) {
-      if(!board.isComplete()){
+      if(board.isComplete()){
         System.out.println("gged");
         reset();
       }

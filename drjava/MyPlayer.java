@@ -612,3 +612,130 @@ public class MyPlayer implements IPlayer {
         MyTreasureHunt.run(new MyPlayer());
     }
 }
+
+
+class Maze {
+
+    public int endx, endy, startx, starty = startx = endy = endx = 0;
+    public int[][] arr;
+
+    private class Point {
+
+        int x;
+        int y;
+        Point parent;
+
+        public Point(int x, int y, Point parent) {
+            this.x = x;
+            this.y = y;
+            this.parent = parent;
+        }
+
+        public Point getParent() {
+            return this.parent;
+        }
+
+        public String toString() {
+            return "x = " + x + " y = " + y;
+        }
+    }
+
+    public Maze(String[][] maze) {
+        this.arr = new int[maze.length][maze[0].length];
+        for (int i = 0; i < maze.length; i++) {
+            for (int j = 0; j < maze[i].length; j++) {
+                if (maze[i][j].equals("#")) {
+                    arr[i][j] = 5;
+                } else if (maze[i][j].equals("T")) {
+                    arr[i][j] = 9;
+                    endx=i;
+                    endy=i;
+                } else {
+                    arr[i][j] = 0;
+                }
+
+                if (maze[i][j].equals("S")) {
+                    this.startx = i;
+                    this.starty = j;
+                }
+            }
+        }
+
+    }
+
+    public Queue<Point> q = new LinkedList<Point>();
+
+    public Point getPathBFS(int x, int y) {
+
+        q.add(new Point(x, y, null));
+
+        while (!q.isEmpty()) {
+            Point p = q.remove();
+
+            if (arr[p.x][p.y] == 9) {
+                System.out.println("Exit is reached!");
+                return p;
+            }
+
+            if (isFree(p.x + 1, p.y)) {
+                arr[p.x][p.y] = -1;
+                Point nextP = new Point(p.x + 1, p.y, p);
+                q.add(nextP);
+            }
+
+            if (isFree(p.x - 1, p.y)) {
+                arr[p.x][p.y] = -1;
+                Point nextP = new Point(p.x - 1, p.y, p);
+                q.add(nextP);
+            }
+
+            if (isFree(p.x, p.y + 1)) {
+                arr[p.x][p.y] = -1;
+                Point nextP = new Point(p.x, p.y + 1, p);
+                q.add(nextP);
+            }
+
+            if (isFree(p.x, p.y - 1)) {
+                arr[p.x][p.y] = -1;
+                Point nextP = new Point(p.x, p.y - 1, p);
+                q.add(nextP);
+            }
+
+        }
+        return null;
+    }
+
+    public boolean isFree(int x, int y) {
+        if ((x >= 0 && x < arr.length) && (y >= 0 && y < arr[x].length) && (arr[x][y] == 0 || arr[x][y] == 9)) {
+            return true;
+        }
+        return false;
+    }
+
+    public Vector<int[]> getPath(){
+      Vector<int[]> vc=new Vector<int[]>();
+      try{
+        Point p = getPathBFS(startx,starty);
+        Vector<int[]> vec=new Vector<int[]>();
+        int end[]={endx,endy};
+        vec.add(end);
+        while(p.getParent() != null) {
+            int cod[]={p.x,p.y};
+            vec.add(cod);
+            p = p.getParent();
+        }
+        int start[]={startx,starty};
+        vec.add(start);
+        //reverse adding
+        for(int i=vec.size()-1;i>=0;i--){
+          vc.add(vec.get(i));
+        }
+      }catch(java.lang.NullPointerException e){
+        int err[]={-1,-1};
+        vc.add(err);
+      }
+        return vc;
+    }
+    
+
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<drjava version="drjava-20190813-220051">
+  <project autorefresh="false" main="MyPlayer" manifest="" root="" work="">
+    <createjar file="schoolname_firstname_lastname.jar" flags="8"/>
+    <source>
+      <file active="true" name="MyPlayer.java" package="" timestamp="25-May-2022 15:09:21">
+        <select from="940" to="940"/>
+        <scroll column="0" row="0"/>
+      </file>
+    </source>
+    <included/>
+    <excluded/>
+    <collapsed/>
+    <classpath>
+      <file absolute="false" name="../lib/javacsv.jar"/>
+      <file absolute="false" name="../lib/treasurehunt.jar"/>
+    </classpath>
+    <breakpoints/>
+    <watches/>
+    <bookmarks/>
+    <preferences/>
+  </project>
+</drjava>

@@ -13,11 +13,8 @@
  * the License.
  */
 
-import java.util.Stack;
-import java.util.Vector;
-import java.util.List;
+import java.util.*;
 import java.awt.Point;
-import java.util.LinkedList;
 import com.ibm.vie.mazerunner.squares.*;
 import java.util.concurrent.*;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -145,7 +142,7 @@ public class MyPlayer implements IPlayer {
               System.out.println(pa);
               
               if(pa.equals("")==false){
-                path+=pa.substring(0,pa.length()-1);
+                path+=pa.substring(0,pa.length());
                 
                 if(i!=0 || i==treasures.size()-1){
                   treasus=i+1;
@@ -213,15 +210,17 @@ public class MyPlayer implements IPlayer {
      * @return Your next move
      */
     public Move selectMove(IBoard board) throws Error {
-      if(moves.size()!=1){
-        System.out.println(moves.size());
+      if(moves.size()>1){
+//        System.out.println(moves.size());
         return moves.pop();
-      }else{
-        Move mov=moves.pop();
-        moves=new Stack<Move>();
-        this.reset();
-        return mov;
+      }else if(moves.size()==1){
+          Move mov=moves.pop();
+          moves=new Stack<Move>();
+          this.reset();
+          return mov;
+        
       }
+        return Move.SOUTH;
     }
     
     public String playerlocation(){
@@ -506,46 +505,34 @@ public class MyPlayer implements IPlayer {
     }
     
     public String findPathFrom(int row, int col){
-      
-      // goal / out of bounds checks - same as existing code
-      // ... "G" for success / "" for failure
-      if(row > maze.length || col > maze[0].length){
-        return "";
-      }
-      if(maze[row][col].equals("#") || maze[row][col].equals(".")){
-        return "";
-      }
-      if(maze[row][col].equals("T")) {
-        return "T";
-      }
-      
-      maze[row][col] = ".";
-      
-      // recursive path search
-      String pu = findPathFrom(row-1, col);
-      if (!pu.isEmpty()) {
-        return "U" + pu;
-      }
-      String pr = findPathFrom(row, col+1);
-      if (!pr.isEmpty()) {
-        return "R" + pr;
-      }
-      String pd = findPathFrom(row+1, col);
-      if (!pd.isEmpty()) {
-        return "D" + pd;
-      }
-      String pl = findPathFrom(row, col-1);
-      if (!pl.isEmpty()) {
-        return "L" + pl;
+      String ans="";
+      Maze mz=new Maze(this.maze);
+      Vector<int[]> pts=mz.getPath();
+      for(int i=0;i<pts.size()-1;i++){
+        int stx,sty,edx,edy;
+        
+        stx=pts.get(i)[0];
+        sty=pts.get(i)[1];
+        edx=pts.get(i+1)[0];
+        edy=pts.get(i+1)[1];
+        
+        if(edx-stx>0){
+          ans+="D";
+        }else if(edx-stx<0){
+          ans+="U";
+        }else if(edy-sty>0){
+          ans+="R";
+        }else if(edy-sty<0){
+          ans+="L";
+        }
       }
       
-      // reset the current cell
-      maze[row][col] =" ";
-      return "";
+      
+      return ans;
     }
 
     public int countscore(String Path, Point startPoint, int treas, int max, boolean ifcompleted){
-      System.out.println("start point is at ("+startPoint.x+","+startPoint.y+")");
+//      System.out.println("start point is at ("+startPoint.x+","+startPoint.y+")");
       if(Path.equals(""))
         return 0;
       
@@ -556,7 +543,6 @@ public class MyPlayer implements IPlayer {
       
       int score=max;
       for(int i=0;i<Path.length();i++){
-        System.out.println("here we r at "+ i);
         char le=Path.charAt(i);
         switch(le){
           case 'U':
@@ -577,7 +563,7 @@ public class MyPlayer implements IPlayer {
             break;
         }
       }
-      System.out.println("reach if completed statement");
+//      System.out.println("reach if completed statement");
       if(ifcompleted){
         score+=500;
       }

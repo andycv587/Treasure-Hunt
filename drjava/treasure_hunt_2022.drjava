@@ -3,9 +3,9 @@
   <project autorefresh="false" main="MyPlayer" manifest="" root="" work="">
     <createjar file="schoolname_firstname_lastname.jar" flags="8"/>
     <source>
-      <file active="true" name="MyPlayer.java" package="" timestamp="25-May-2022 15:09:21">
-        <select from="940" to="940"/>
-        <scroll column="0" row="0"/>
+      <file active="true" name="MyPlayer.java" package="" timestamp="25-May-2022 22:31:31">
+        <select from="9683" to="9683"/>
+        <scroll column="4126" row="0"/>
       </file>
     </source>
     <included/>
@@ -15,7 +15,9 @@
       <file absolute="false" name="../lib/javacsv.jar"/>
       <file absolute="false" name="../lib/treasurehunt.jar"/>
     </classpath>
-    <breakpoints/>
+    <breakpoints>
+      <breakpoint enabled="true" file="MyPlayer.java" line="137"/>
+    </breakpoints>
     <watches/>
     <bookmarks/>
     <preferences/>

@@ -38,10 +38,11 @@ public class MyPlayer implements IPlayer {
   public Vector<Point> treasures=new Vector<Point>();//treasure indexs
   public boolean isnotfirstpt,reached,isMud,isWater,isBushes,isTrees,isMountain,isLava=isMountain=isTrees=isBushes=isWater=isMud=reached=isnotfirstpt=false;
   public Point StartPoint=new Point();
+  public Point OriginalStartPoint=new Point();
   public int time=0, treasus=0;
   public int[] scoreboard=new int[7];
   public String[] pathes=new String[7];
-  public String[][] maze, orginalboard = maze = new String[5][5];
+  public String[][] maze0, orginalboard = maze0 = new String[5][5];
     /**
      * Gives the board, and the IBM judges a way to identify
      * your player, and differentiate it from other student submissions.
@@ -109,8 +110,6 @@ public class MyPlayer implements IPlayer {
       System.out.println("you have total "+bushes+" bush squares on this board");
       System.out.println("you have total "+mountains+" mountain squares on this board");
       System.out.println("you have total "+lavas+" lava squares on this board");
-      
-      
       ///////////////////////////////Boundary line//////////////////////////////////////////
       
       int executetime=this.executiontime();
@@ -121,13 +120,13 @@ public class MyPlayer implements IPlayer {
           if(time==0){
             changeboard(mode,board);
  /////////////////////////////testing portion//////////////////////////////
-            System.out.println("level: "+mode);
-            for(int i=0;i<maze.length;i++){
-              for(int j=0;j<maze[i].length;j++){
-                System.out.print(maze[i][j]+",");
-              }
-              System.out.println();
-            }
+//            System.out.println("level: "+mode);
+//            for(int i=0;i<maze0.length;i++){
+//              for(int j=0;j<maze0[i].length;j++){
+//                System.out.print(maze0[i][j]+" ");
+//              }
+//              System.out.println();
+//            }
  //////////////////////////////////////////////////////////////
             this.endPts();
             if(isnotfirstpt==false){
@@ -137,10 +136,18 @@ public class MyPlayer implements IPlayer {
             
             
             for(int i=0;i<treasures.size();i++){
-              this.only(treasures.get(i));
-              String pa=this.findPathFrom(StartPoint.x,StartPoint.y);
-              System.out.println(pa);
+              //if it has multi treasures, it will change position
+              if(treasures.size()>1 && i!=0){
+                // you have to change "S" to previous "T", and plugin new "T"
+                maze0[StartPoint.x][StartPoint.y]="S";
+                maze0[treasures.get(i).x][treasures.get(i).y]="T";
+              }else if(i==0){
+                this.only(treasures.get(i));
+                OriginalStartPoint=new Point(StartPoint.x,StartPoint.y);
+              }
               
+              String pa=this.findPathFrom(StartPoint.x,StartPoint.y);
+//              System.out.println(pa);
               if(pa.equals("")==false){
                 path+=pa.substring(0,pa.length());
                 
@@ -151,26 +158,28 @@ public class MyPlayer implements IPlayer {
                   }
                 }
               }
-              if(treasures.size()>1)
+              if(treasures.size()>1){
+                maze0[StartPoint.x][StartPoint.y]=" ";
                 StartPoint=treasures.get(i);
+              }
             }
             pathes[mode]=path;
             path="";
           }
           
-          scoreboard[mode]=countscore(pathes[mode],StartPoint,treasus,board.getMaxSteps(),reached);
+          scoreboard[mode]=countscore(pathes[mode],OriginalStartPoint,treasus,board.getMaxSteps(),reached);
           mode+=1;
         }
         ///////////////Testing section///////////////////////////
-        System.out.println(executetime);
-        System.out.println(path);
-        System.out.println("the path:"+path.length());
-        for(int i=0;i<scoreboard.length;i++){
-          System.out.println(i+"="+scoreboard[i]);
-        }
-        for(int i=0;i<pathes.length;i++){
-          System.out.println(i+"="+pathes[i]);
-        }
+//        System.out.println(executetime);
+//        System.out.println(path);
+//        System.out.println("the path:"+path.length());
+//        for(int i=0;i<scoreboard.length;i++){
+//          System.out.println(i+"="+scoreboard[i]);
+//        }
+//        for(int i=0;i<pathes.length;i++){
+//          System.out.println(i+"="+pathes[i]);
+//        }
         ////////////////////////////////////////////////////
         
         int idx=0;
@@ -183,6 +192,7 @@ public class MyPlayer implements IPlayer {
         this.setMoves(pathes[idx]);
         time+=1;
       }catch(Exception e){
+        reset();
         gameCompleted(board);
       }
       
@@ -190,6 +200,18 @@ public class MyPlayer implements IPlayer {
       
     }
     
+//    public String[][] replace(String[][] board, int targetx, int targety, String target2){
+//      String[][] newboard=new String[board.length][board[0].length];
+//      for(int i=0;i<board.length;i++){
+//        for(int j=0;j<board[i].length;j++){
+//          newboard[i][j]=board[i][j];
+//          if(i==targetx && j==targety){
+//            newboard[i][j]=target2;
+//          }
+//        }
+//      }
+//      return newboard;
+//    }
     
 
     /**
@@ -262,20 +284,22 @@ public class MyPlayer implements IPlayer {
       this.moves=new Stack<Move>();//move need to rea
       this.treasures=new Vector<Point>();//treasure indexs
       this.reached=false;
+      this.isnotfirstpt=false;
       this.isMud=false;
       this.isWater=false;
       this.isBushes=false;
       this.isTrees=false;
       this.isMountain=false;
       this.isLava=false;
-      this.StartPoint=new Point(); 
       this.time=0;
       this.treasus=0;
       this.scoreboard=new int[7];
       this.pathes=new String[7];
-      this.maze = new String[5][5];
+      this.maze0 = new String[5][5];
       this.orginalboard = new String[5][5];
-      
+      this.OriginalStartPoint=new Point();
+      this.StartPoint=new Point();
+
     }
     
     /*
@@ -325,15 +349,26 @@ public class MyPlayer implements IPlayer {
 
     
     public void only(Point treas){
-      for(int i=0;i<maze.length;i++){
-        for(int j=0;j<maze[i].length;j++){
-          if(maze[i][j].equals("T"))
-            maze[i][j]=" ";
+      for(int i=0;i<maze0.length;i++){
+        for(int j=0;j<maze0[i].length;j++){
+          if(maze0[i][j].equals("T"))
+            maze0[i][j]=" ";
         }
       }
-      maze[treas.x][treas.y]="T";
+      maze0[treas.x][treas.y]="T";
     }
     
+    
+    
+    public String[][] reasign(String[][] var){
+      String[][] arr=new String[var.length][var[0].length];
+      for(int i=0;i<var.length;i++){
+        for(int j=0;j<var[i].length;j++){
+          arr[i][j]=var[i][j];
+        }
+      }
+      return arr;
+    }
     
     /**
      * lvl 0 = only space
@@ -385,84 +420,6 @@ public class MyPlayer implements IPlayer {
       orginalboard[loc.getRow()][loc.getCol()]="S";
     }
     
-    public String[][] reasign(String[][] var){
-      String[][] arr=new String[var.length][var[0].length];
-      for(int i=0;i<var.length;i++){
-        for(int j=0;j<var[i].length;j++){
-          arr[i][j]=var[i][j];
-        }
-      }
-      return arr;
-    }
-    
-    public void changeboard(int level,IBoard board){
-      String[][] nbd=reasign(orginalboard);
-      for(int i=0;i<nbd.length;i++){
-        for(int j=0;j<nbd[i].length;j++){
-          if(level==0){
-            if(!nbd[i][j].equals(" ")){
-              if((!(nbd[i][j].equals("T"))&&(!nbd[i][j].equals(" "))))
-                nbd[i][j]="#";
-            }
-          }else if(level==1){
-            if(nbd[i][j].equals(" ")==false && nbd[i][j].equals("-")==false){
-              if((!nbd[i][j].equals("T")))
-                nbd[i][j]="#";
-            }
-            
-            if(nbd[i][j].equals("-"))
-              nbd[i][j]=" ";
-                  
-            
-          }else if(level==2){
-            if(nbd[i][j].equals(" ")==false && nbd[i][j].equals("-")==false && nbd[i][j].equals("~")==false){
-              if(!nbd[i][j].equals("T"))
-                nbd[i][j]="#";
-            }  
-            if(nbd[i][j].equals("-") || nbd[i][j].equals("~"))
-              nbd[i][j]=" ";
-                              
-          }else if(level==3){
-            if(nbd[i][j].equals(" ")==false && nbd[i][j].equals("-")==false && nbd[i][j].equals("~")==false && nbd[i][j].equals("%")==false){
-              if(!nbd[i][j].equals("T"))
-                nbd[i][j]="#";
-            }
-            
-            if(nbd[i][j].equals("-") || nbd[i][j].equals("~") || nbd[i][j].equals("%"))
-              nbd[i][j]=" ";
-               
-          }else if(level==4){
-            if(nbd[i][j].equals(" ") == false && nbd[i][j].equals("-") == false && nbd[i][j].equals("~") == false && nbd[i][j].equals("%") == false && nbd[i][j].equals("|") == false){
-              if(!nbd[i][j].equals("T"))
-                nbd[i][j]="#";
-            }
-            if(nbd[i][j].equals("-") || nbd[i][j].equals("~") || nbd[i][j].equals("%") || nbd[i][j].equals("|"))
-              nbd[i][j]=" ";
-               
-          }else if(level==5){
-            if(nbd[i][j].equals(" ") == false && nbd[i][j].equals("-") == false && nbd[i][j].equals("~") == false && nbd[i][j].equals("%") == false && nbd[i][j].equals("|") == false && nbd[i][j].equals("^") == false){
-              if(!nbd[i][j].equals("T"))
-                nbd[i][j]="#";
-            }
-            if(nbd[i][j].equals("-") || nbd[i][j].equals("~") || nbd[i][j].equals("%") || nbd[i][j].equals("|") || nbd[i][j].equals("^"))
-              nbd[i][j]=" ";
-               
-          }else if(level==6){
-            if(nbd[i][j].equals(" ") == false && nbd[i][j].equals("-") == false && nbd[i][j].equals("~") == false && nbd[i][j].equals("%") == false && nbd[i][j].equals("|") == false && nbd[i][j].equals("^") == false && nbd[i][j].equals("*") == false){
-              if(!nbd[i][j].equals("T"))
-                nbd[i][j]="#";
-            }
-            if(nbd[i][j].equals("-") || nbd[i][j].equals("~") || nbd[i][j].equals("%") || nbd[i][j].equals("|") || nbd[i][j].equals("^") || nbd[i][j].equals("*"))
-              nbd[i][j]=" ";
-               
-          }
-        }
-      }
-      maze=nbd;        
-      Location loc=board.getStartingLocation();
-      nbd[loc.getRow()][loc.getCol()]="S";
-    }
-    
     public void setMoves(String move){
       for(int i=move.length()-1;i>=0;i--){
         char letter=move.charAt(i);
@@ -506,7 +463,7 @@ public class MyPlayer implements IPlayer {
     
     public String findPathFrom(int row, int col){
       String ans="";
-      Maze mz=new Maze(this.maze);
+      Maze mz=new Maze(this.maze0);
       Vector<int[]> pts=mz.getPath();
       for(int i=0;i<pts.size()-1;i++){
         int stx,sty,edx,edy;
@@ -573,6 +530,8 @@ public class MyPlayer implements IPlayer {
       return score;
     }
     
+    
+    /*BELOW HAS NO PROBLEM*/
     public int calc(String type, int score){
             switch(type){
               case " ":
@@ -601,6 +560,75 @@ public class MyPlayer implements IPlayer {
                 break;
             }
           return score;
+    }
+    
+    
+    public void changeboard(int level,IBoard board){
+      String[][] nbd=reasign(orginalboard);
+      for(int i=0;i<nbd.length;i++){
+        for(int j=0;j<nbd[i].length;j++){
+          if(level==0){
+            if(!nbd[i][j].equals(" ")){
+              if((!(nbd[i][j].equals("T"))&&(!nbd[i][j].equals(" "))))
+                nbd[i][j]="#";
+            }
+          }else if(level==1){
+            if(nbd[i][j].equals(" ")==false && nbd[i][j].equals("-")==false){
+              if((!nbd[i][j].equals("T")))
+                nbd[i][j]="#";
+            }
+            
+            if(nbd[i][j].equals("-"))
+              nbd[i][j]=" ";
+                  
+            
+          }else if(level==2){
+            if(nbd[i][j].equals(" ")==false && nbd[i][j].equals("-")==false && nbd[i][j].equals("~")==false){
+              if(!nbd[i][j].equals("T"))
+                nbd[i][j]="#";
+            }  
+            if(nbd[i][j].equals("-") || nbd[i][j].equals("~"))
+              nbd[i][j]=" ";
+                              
+          }else if(level==3){
+            if(nbd[i][j].equals(" ")==false && nbd[i][j].equals("-")==false && nbd[i][j].equals("~")==false && nbd[i][j].equals("%")==false){
+              if(!nbd[i][j].equals("T"))
+                nbd[i][j]="#";
+            }
+            
+            if(nbd[i][j].equals("-") || nbd[i][j].equals("~") || nbd[i][j].equals("%"))
+              nbd[i][j]=" ";
+               
+          }else if(level==4){
+            if(nbd[i][j].equals(" ") == false && nbd[i][j].equals("-") == false && nbd[i][j].equals("~") == false && nbd[i][j].equals("%") == false && nbd[i][j].equals("|") == false){
+              if(!nbd[i][j].equals("T"))
+                nbd[i][j]="#";
+            }
+            if(nbd[i][j].equals("-") || nbd[i][j].equals("~") || nbd[i][j].equals("%") || nbd[i][j].equals("|"))
+              nbd[i][j]=" ";
+               
+          }else if(level==5){
+            if(nbd[i][j].equals(" ") == false && nbd[i][j].equals("-") == false && nbd[i][j].equals("~") == false && nbd[i][j].equals("%") == false && nbd[i][j].equals("|") == false && nbd[i][j].equals("^") == false){
+              if(!nbd[i][j].equals("T"))
+                nbd[i][j]="#";
+            }
+            if(nbd[i][j].equals("-") || nbd[i][j].equals("~") || nbd[i][j].equals("%") || nbd[i][j].equals("|") || nbd[i][j].equals("^"))
+              nbd[i][j]=" ";
+               
+          }else if(level==6){
+            if(nbd[i][j].equals(" ") == false && nbd[i][j].equals("-") == false && nbd[i][j].equals("~") == false && nbd[i][j].equals("%") == false && nbd[i][j].equals("|") == false && nbd[i][j].equals("^") == false && nbd[i][j].equals("*") == false){
+              if(!nbd[i][j].equals("T"))
+                nbd[i][j]="#";
+            }
+            if(nbd[i][j].equals("-") || nbd[i][j].equals("~") || nbd[i][j].equals("%") || nbd[i][j].equals("|") || nbd[i][j].equals("^") || nbd[i][j].equals("*"))
+              nbd[i][j]=" ";
+               
+          }
+        }
+      }
+      maze0=nbd;        
+      Location loc=board.getStartingLocation();
+      nbd[loc.getRow()][loc.getCol()]="S";
     }
     /**
      * Game launcher. Create an instance of your player class and
@@ -648,8 +676,8 @@ class Maze {
                     arr[i][j] = 5;
                 } else if (maze[i][j].equals("T")) {
                     arr[i][j] = 9;
-                    endx=i;
-                    endy=i;
+                    this.endx=i;
+                    this.endy=j;
                 } else {
                     arr[i][j] = 0;
                 }
@@ -673,7 +701,7 @@ class Maze {
             Point p = q.remove();
 
             if (arr[p.x][p.y] == 9) {
-                System.out.println("Exit is reached!");
+//                System.out.println("Exit is reached!");
                 return p;
             }
 
@@ -726,13 +754,13 @@ class Maze {
         }
         int start[]={startx,starty};
         vec.add(start);
+        
         //reverse adding
         for(int i=vec.size()-1;i>=0;i--){
           vc.add(vec.get(i));
         }
       }catch(java.lang.NullPointerException e){
-        int err[]={-1,-1};
-        vc.add(err);
+        System.out.println("Null Pointer Exception for getPath()");
       }
         return vc;
     }
